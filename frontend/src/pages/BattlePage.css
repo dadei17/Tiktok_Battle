@@ -60,18 +60,11 @@
     border: 1px solid rgba(74, 158, 255, 0.2);
 }
 
-/* Countries grid */
+/* Countries list — vertical stack of horizontal cards */
 .countries-grid {
     display: flex;
-    gap: 1.25rem;
-    justify-content: stretch;
-    align-items: flex-start;
-    flex-wrap: wrap;
-}
-
-.countries-grid>* {
-    flex: 1;
-    min-width: 140px;
+    flex-direction: column;
+    gap: 0.85rem;
 }
 
 /* Gift toast */
