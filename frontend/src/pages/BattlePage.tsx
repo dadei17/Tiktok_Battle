@@ -30,6 +30,7 @@ export default function BattlePage() {
     const [manualPoints, setManualPoints] = useState(100)
     const [manualGift, setManualGift] = useState('')
     const [toast, setToast] = useState<string | null>(null)
+    const [showAdmin, setShowAdmin] = useState(false)
 
     const showToast = (msg: string) => {
         setToast(msg)
@@ -57,6 +58,21 @@ export default function BattlePage() {
     }, [])
 
     const { state, connected } = useWebSocket(onLionGift, onGameOver)
+
+    // Derived states
+    const scores = state?.scores || {}
+    const rankings = state?.rankings || []
+    const countries = Object.keys(scores)
+    const maxScore = Math.max(1, ...(Object.values(scores) as number[]))
+    const timeRemaining = state?.time_remaining ?? DEFAULT_DURATION
+    const totalSeconds = state?.total_seconds ?? DEFAULT_DURATION
+
+    // Auto-show admin if no battle
+    useEffect(() => {
+        if (countries.length === 0 && !showAdmin) {
+            setShowAdmin(true)
+        }
+    }, [countries.length])
 
     // Show winner modal on game_over event (must be in useEffect, not render body)
     useEffect(() => {
@@ -99,13 +115,6 @@ export default function BattlePage() {
         }
     }
 
-    const scores = state?.scores || {}
-    const rankings = state?.rankings || []
-    const maxScore = Math.max(1, ...(Object.values(scores) as number[]))
-    const timeRemaining = state?.time_remaining ?? DEFAULT_DURATION
-    const totalSeconds = state?.total_seconds ?? DEFAULT_DURATION
-    const countries = Object.keys(scores)
-
     return (
         <div className="battle-page container">
             {showWinner && winnerData && (
@@ -140,6 +149,15 @@ export default function BattlePage() {
                 </div>
             )}
 
+            {/* Admin toggle button (fixed layout benefit) */}
+            <button
+                className="reveal-admin-btn"
+                onClick={() => setShowAdmin(!showAdmin)}
+                title="Toggle Admin Panel"
+            >
+                {showAdmin ? '🔒' : '⚙️'}
+            </button>
+
             {/* Country cards */}
             {countries.length > 0 ? (
                 <div className="countries-grid">
@@ -171,58 +189,67 @@ export default function BattlePage() {
                 <div className="no-battle-card card">
                     <div className="no-battle-icon">⚔️</div>
                     <h2>No Active Battle</h2>
-                    <p>Start a battle using the controls below or via TikTok live.</p>
+                    <p>Click below to open controls and start a battle.</p>
+                    <button
+                        className="btn btn-primary"
+                        style={{ marginTop: '1.5rem' }}
+                        onClick={() => setShowAdmin(true)}
+                    >
+                        🚀 Open Battle Controls
+                    </button>
                 </div>
             )}
 
-            {/* Admin Controls */}
-            <div className="admin-panel card">
-                <h3 className="admin-title">⚙️ Admin Controls</h3>
-                <div className="admin-row">
-                    <select
-                        className="admin-select"
-                        value={manualCountry}
-                        onChange={e => setManualCountry(e.target.value)}
-                        id="manual-country-select"
-                    >
-                        <option value="">Select country…</option>
-                        {countries.map(c => <option key={c} value={c}>{c}</option>)}
-                    </select>
-                    <input
-                        type="number"
-                        className="admin-input"
-                        value={manualGift ? SIMULATED_GIFT_POINTS[manualGift] : manualPoints}
-                        onChange={e => setManualPoints(Number(e.target.value))}
-                        min={1}
-                        id="manual-points-input"
-                        disabled={!!manualGift}
-                        title={manualGift ? "Points are fixed for the selected gift" : ""}
-                    />
-                    <select
-                        className="admin-select"
-                        value={manualGift}
-                        onChange={e => setManualGift(e.target.value)}
-                        id="manual-gift-select"
-                    >
-                        <option value="">Simulation Link (None)</option>
-                        <option value="Rose">🌹 Rose (1)</option>
-                        <option value="TikTok">🎶 TikTok (1)</option>
-                        <option value="Finger Heart">🫰 Finger Heart (5)</option>
-                        <option value="Panda">🐼 Panda (5)</option>
-                        <option value="Sunglasses">🕶️ Sunglasses (10)</option>
-                        <option value="Rainbow Puke">🤮 Rainbow Puke (50)</option>
-                        <option value="Interstellar">🚀 Interstellar (100)</option>
-                        <option value="Lion">🦁 Lion (500)</option>
-                        <option value="Universe">🌌 Universe (1000)</option>
-                    </select>
-                    <button className="btn btn-primary" onClick={handleManualScore} id="manual-score-btn">
-                        Add Points
-                    </button>
-                    <button className="btn btn-danger" onClick={handleReset} id="reset-battle-btn">
-                        🔄 Reset Battle
-                    </button>
+            {/* Admin Panel (Collapsible) */}
+            {showAdmin && (
+                <div className="admin-panel card animate-slide-up">
+                    <h3 className="admin-title">⚙️ Admin Controls</h3>
+                    <div className="admin-row">
+                        <select
+                            className="admin-select"
+                            value={manualCountry}
+                            onChange={e => setManualCountry(e.target.value)}
+                            id="manual-country-select"
+                        >
+                            <option value="">Select country…</option>
+                            {countries.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                        <input
+                            type="number"
+                            className="admin-input"
+                            value={manualGift ? SIMULATED_GIFT_POINTS[manualGift] : manualPoints}
+                            onChange={e => setManualPoints(Number(e.target.value))}
+                            min={1}
+                            id="manual-points-input"
+                            disabled={!!manualGift}
+                            title={manualGift ? "Points are fixed for the selected gift" : ""}
+                        />
+                        <select
+                            className="admin-select"
+                            value={manualGift}
+                            onChange={e => setManualGift(e.target.value)}
+                            id="manual-gift-select"
+                        >
+                            <option value="">Simulation Link (None)</option>
+                            <option value="Rose">🌹 Rose (1)</option>
+                            <option value="TikTok">🎶 TikTok (1)</option>
+                            <option value="Finger Heart">🫰 Finger Heart (5)</option>
+                            <option value="Panda">🐼 Panda (5)</option>
+                            <option value="Sunglasses">🕶️ Sunglasses (10)</option>
+                            <option value="Rainbow Puke">🤮 Rainbow Puke (50)</option>
+                            <option value="Interstellar">🚀 Interstellar (100)</option>
+                            <option value="Lion">🦁 Lion (500)</option>
+                            <option value="Universe">🌌 Universe (1000)</option>
+                        </select>
+                        <button className="btn btn-primary" onClick={handleManualScore} id="manual-score-btn">
+                            Add Points
+                        </button>
+                        <button className="btn btn-danger" onClick={handleReset} id="reset-battle-btn">
+                            🔄 Reset Battle
+                        </button>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     )
 }

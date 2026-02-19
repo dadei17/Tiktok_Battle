@@ -175,3 +175,36 @@
     white-space: nowrap;
     letter-spacing: 0.02em;
 }
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    .country-card {
+        gap: 0.5rem;
+        padding: 0.45rem 0.75rem;
+    }
+
+    .flag-circle,
+    .flag-img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .country-name {
+        width: 85px;
+        font-size: 0.8rem;
+    }
+
+    .rank-badge {
+        font-size: 1rem;
+        width: 1.6rem;
+    }
+
+    .bar-track {
+        height: 24px;
+    }
+
+    .bar-score {
+        font-size: 0.72rem;
+        padding-left: 6px;
+    }
+}

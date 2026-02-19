@@ -1,7 +1,9 @@
 /* ===================================================
    Country Battle Live — Global Styles
    =================================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -35,7 +37,8 @@
   --color-country-8: #1abc9c;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   background-color: var(--bg-primary);
   color: var(--text-primary);
@@ -61,10 +64,22 @@ a:hover {
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-primary); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-blue);
+}
 
 /* Utility classes */
 .container {
@@ -91,10 +106,25 @@ a:hover {
   letter-spacing: 0.05em;
 }
 
-.badge-gold { background: rgba(245, 197, 24, 0.15); color: var(--accent-gold); }
-.badge-silver { background: rgba(160, 174, 192, 0.15); color: var(--accent-silver); }
-.badge-bronze { background: rgba(205, 127, 50, 0.15); color: var(--accent-bronze); }
-.badge-4th { background: rgba(136, 136, 170, 0.1); color: var(--text-secondary); }
+.badge-gold {
+  background: rgba(245, 197, 24, 0.15);
+  color: var(--accent-gold);
+}
+
+.badge-silver {
+  background: rgba(160, 174, 192, 0.15);
+  color: var(--accent-silver);
+}
+
+.badge-bronze {
+  background: rgba(205, 127, 50, 0.15);
+  color: var(--accent-bronze);
+}
+
+.badge-4th {
+  background: rgba(136, 136, 170, 0.1);
+  color: var(--text-secondary);
+}
 
 .btn {
   display: inline-flex;
@@ -115,52 +145,135 @@ a:hover {
   background: linear-gradient(135deg, #4a9eff, #7b5cf0);
   color: #fff;
 }
-.btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+.btn-primary:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
 
 .btn-danger {
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   color: #fff;
 }
-.btn-danger:hover { opacity: 0.85; transform: translateY(-1px); }
+
+.btn-danger:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
 
 .btn-ghost {
   background: transparent;
   color: var(--text-secondary);
   border: 1px solid var(--border);
 }
-.btn-ghost:hover { color: var(--text-primary); border-color: var(--accent-blue); }
+
+.btn-ghost:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-blue);
+}
 
 /* Animations */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(74,158,255,0); }
-  50% { box-shadow: 0 0 20px 4px rgba(74,158,255,0.35); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 158, 255, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 4px rgba(74, 158, 255, 0.35);
+  }
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes winner-pop {
-  0% { transform: scale(0.7); opacity: 0; }
-  60% { transform: scale(1.05); }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+
+  60% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes confetti-fall {
-  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(120vh) rotate(720deg); opacity: 0; }
+  0% {
+    transform: translateY(-20px) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(120vh) rotate(720deg);
+    opacity: 0;
+  }
 }
 
 @keyframes bar-fill {
-  from { height: 0; }
-  to { height: var(--target-height); }
+  from {
+    height: 0;
+  }
+
+  to {
+    height: var(--target-height);
+  }
 }
 
-.animate-slide-up { animation: slide-up 0.4s ease both; }
-.animate-fade-in { animation: fade-in 0.3s ease both; }
+.animate-slide-up {
+  animation: slide-up 0.4s ease both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease both;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+
+  html,
+  body {
+    font-size: 14px;
+    /* Slightly smaller base font */
+  }
+
+  .container {
+    padding: 0 0.5rem;
+    /* Maximize available width */
+  }
+
+  .card {
+    padding: 1rem;
+    /* Tighter padding inside cards */
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    /* Thinner scrollbar for mobile */
+  }
+}
