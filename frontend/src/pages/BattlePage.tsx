@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useWebSocket } from '../hooks/useWebSocket'
 import { CountryCard } from '../components/CountryCard'
 import { Timer } from '../components/Timer'
@@ -142,16 +143,29 @@ export default function BattlePage() {
             {/* Country cards */}
             {countries.length > 0 ? (
                 <div className="countries-grid">
-                    {rankings.map(({ country, score, position }) => (
-                        <CountryCard
-                            key={country}
-                            country={country}
-                            score={score}
-                            position={position}
-                            maxScore={maxScore}
-                            isWinner={state?.battle_finished && position === 1}
-                        />
-                    ))}
+                    <AnimatePresence mode="popLayout">
+                        {rankings.map(({ country, score, position }) => (
+                            <motion.div
+                                key={country}
+                                layout
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{
+                                    layout: { duration: 0.4, type: 'spring', stiffness: 100, damping: 20 },
+                                    opacity: { duration: 0.2 }
+                                }}
+                            >
+                                <CountryCard
+                                    country={country}
+                                    score={score}
+                                    position={position}
+                                    maxScore={maxScore}
+                                    isWinner={state?.battle_finished && position === 1}
+                                />
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
                 </div>
             ) : (
                 <div className="no-battle-card card">

@@ -34,6 +34,29 @@
     border-color: rgba(245, 197, 24, 0.6) !important;
 }
 
+.country-card.rank-up {
+    animation: rank-up-flash 2s ease-out;
+    z-index: 10;
+}
+
+@keyframes rank-up-flash {
+    0% {
+        border-color: #fff;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+        transform: scale(1.02);
+    }
+
+    30% {
+        border-color: #fff;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+        transform: scale(1.03);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 /* Rank */
 .rank-badge {
     font-size: 1.1rem;

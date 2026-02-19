@@ -1,3 +1,4 @@
+import { forwardRef, useEffect, useRef, useState } from 'react'
 import './CountryCard.css'
 
 const COUNTRY_COLORS: Record<string, string> = {
@@ -52,54 +53,70 @@ interface CountryCardProps {
     isWinner?: boolean
 }
 
-export function CountryCard({ country, score, position, maxScore, isWinner }: CountryCardProps) {
-    const color = getCountryColor(country)
-    const flagUrl = getFlagUrl(country)
+export const CountryCard = forwardRef<HTMLDivElement, CountryCardProps>(
+    ({ country, score, position, maxScore, isWinner }, ref) => {
+        const color = getCountryColor(country)
+        const flagUrl = getFlagUrl(country)
 
-    // Fill is 0–80% of the bar container (never reaches the edge)
-    const fillPct = maxScore > 0 ? Math.max(4, (score / maxScore) * 80) : 4
+        const prevPositionRef = useRef(position)
+        const [isRankUp, setIsRankUp] = useState(false)
 
-    const positionLabel = ['🥇', '🥈', '🥉', '4️⃣'][position - 1] || `#${position}`
-    const positionClass = ['gold', 'silver', 'bronze', 'fourth'][position - 1] || 'fourth'
+        useEffect(() => {
+            if (position < prevPositionRef.current) {
+                // Moved up (e.g., 4 -> 3)
+                setIsRankUp(true)
+                const timer = setTimeout(() => setIsRankUp(false), 2000)
+                return () => clearTimeout(timer)
+            }
+            prevPositionRef.current = position
+        }, [position])
 
-    return (
-        <div
-            className={`country-card ${positionClass} ${isWinner ? 'winner-card' : ''}`}
-            id={`card-${country.replace(/\s+/g, '-')}`}
-        >
-            {/* Rank */}
-            <span className="rank-badge">{positionLabel}</span>
+        // Fill is 0–80% of the bar container (never reaches the edge)
+        const fillPct = maxScore > 0 ? Math.max(4, (score / maxScore) * 80) : 4
 
-            {/* Flag circle */}
-            <div className="flag-circle" style={{ boxShadow: `0 0 0 2px ${color}66` }}>
-                {flagUrl ? (
-                    <img
-                        className="flag-img"
-                        src={flagUrl}
-                        alt={country}
-                        onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
-                    />
-                ) : (
-                    <span className="flag-fallback">{country.slice(0, 2).toUpperCase()}</span>
-                )}
-            </div>
+        const positionLabel = ['🥇', '🥈', '🥉', '4️⃣'][position - 1] || `#${position}`
+        const positionClass = ['gold', 'silver', 'bronze', 'fourth'][position - 1] || 'fourth'
 
-            {/* Country name */}
-            <span className="country-name">{country}</span>
+        return (
+            <div
+                ref={ref}
+                className={`country-card ${positionClass} ${isWinner ? 'winner-card' : ''} ${isRankUp ? 'rank-up' : ''}`}
+                id={`card-${country.replace(/\s+/g, '-')}`}
+            >
+                {/* Rank */}
+                <span className="rank-badge">{positionLabel}</span>
 
-            {/* Bar track */}
-            <div className="bar-track">
-                <div
-                    className="bar-fill"
-                    style={{
-                        width: `${fillPct}%`,
-                        background: `linear-gradient(to right, ${color}cc, ${color})`,
-                        boxShadow: `0 0 10px ${color}55`,
-                    }}
-                >
-                    <span className="bar-score">{score.toLocaleString()} pts</span>
+                {/* Flag circle */}
+                <div className="flag-circle" style={{ boxShadow: `0 0 0 2px ${color}66` }}>
+                    {flagUrl ? (
+                        <img
+                            className="flag-img"
+                            src={flagUrl}
+                            alt={country}
+                            onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+                        />
+                    ) : (
+                        <span className="flag-fallback">{country.slice(0, 2).toUpperCase()}</span>
+                    )}
+                </div>
+
+                {/* Country name */}
+                <span className="country-name">{country}</span>
+
+                {/* Bar track */}
+                <div className="bar-track">
+                    <div
+                        className="bar-fill"
+                        style={{
+                            width: `${fillPct}%`,
+                            background: `linear-gradient(to right, ${color}cc, ${color})`,
+                            boxShadow: `0 0 10px ${color}55`,
+                        }}
+                    >
+                        <span className="bar-score">{score.toLocaleString()} pts</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
-}
+        )
+    }
+)
