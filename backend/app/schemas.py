@@ -19,6 +19,7 @@ class BattleStateResponse(BaseModel):
     rankings: list[RankingEntry]
     time_remaining: int
     battle_finished: bool
+    last_gift: dict | None = None
 
 
 # --- Battle Result DB Schemas ---
@@ -72,6 +73,7 @@ class LeaderboardEntry(BaseModel):
 class ManualScoreRequest(BaseModel):
     country: str
     points: int
+    gift: str | None = None
 
 
 class StartBattleRequest(BaseModel):

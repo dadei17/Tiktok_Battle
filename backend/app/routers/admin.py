@@ -22,7 +22,17 @@ async def manual_score(request: Request, payload: ManualScoreRequest):
                    f"Valid: {list(battle.scores.keys())}"
         )
 
-    success = battle.add_score(payload.country, payload.points)
+    gift_info = None
+    if payload.gift:
+        gift_info = {
+            "user": "Admin",
+            "gift": payload.gift,
+            "points": payload.points,
+            "country": payload.country,
+            "is_lion": payload.gift.lower() == "lion",
+        }
+
+    success = battle.add_score(payload.country, payload.points, gift_info=gift_info)
     if not success:
         raise HTTPException(status_code=409, detail="Battle already finished.")
 
@@ -31,7 +41,7 @@ async def manual_score(request: Request, payload: ManualScoreRequest):
 
     return MessageResponse(
         message="Score updated",
-        detail=f"+{payload.points} pts → {payload.country}"
+        detail=f"+{payload.points} pts → {payload.country}" + (f" ({payload.gift})" if payload.gift else "")
     )
 
 

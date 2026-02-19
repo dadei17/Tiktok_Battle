@@ -37,8 +37,9 @@ class Battle:
         # Concurrency safety
         self._lock = asyncio.Lock()
         self.battle_finished: bool = False
+        self.last_gift: dict | None = None
 
-    def add_score(self, country: str, points: int) -> bool:
+    def add_score(self, country: str, points: int, gift_info: dict | None = None) -> bool:
         """Thread-safe score add (no lock needed — asyncio single-threaded per event loop)."""
         if self.battle_finished:
             return False
@@ -46,6 +47,8 @@ class Battle:
             logger.warning(f"Country '{country}' not found in battle.")
             return False
         self.scores[country] = max(0, self.scores[country] + points)
+        if gift_info:
+            self.last_gift = gift_info
         return True
 
     def get_rankings(self) -> list[dict]:
@@ -70,6 +73,7 @@ class Battle:
             "time_remaining": int(remaining),
             "total_seconds": self.duration_seconds,
             "battle_finished": self.battle_finished,
+            "last_gift": self.last_gift,
         }
 
     async def end_battle(
