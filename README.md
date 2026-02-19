@@ -1,22 +1,39 @@
 # Country Battle Live 🏆⚔️
 
-A production-ready real-time TikTok gift battle application where viewers support countries by sending gifts during a live stream.
+A real-time TikTok gift battle — viewers support countries by sending gifts during a live stream. Scores update instantly via WebSockets.
 
-## Quick Start
+---
+
+## Development Setup
+
+The frontend runs **locally** (instant hot-reload on every save) while the backend and database run in **Docker**.
+
+### 1 — Start Backend + Database (Docker)
 
 ```bash
-cd CountryBattleLive
-
-# Copy and configure environment (optionally set TikTok username)
+# Copy and configure environment (set your TikTok username if needed)
 cp .env.example .env
 
-# Start everything
-docker-compose up --build
+# Start only backend + postgres
+docker-compose up -d
+```
+
+- **Backend API:** http://localhost:8000
+- **API Docs:** http://localhost:8000/docs
+
+### 2 — Start Frontend (local, hot-reload)
+
+```bash
+cd frontend
+npm install        # first time only
+npm run dev
 ```
 
 - **Frontend:** http://localhost:3000
-- **Backend API:** http://localhost:8000
-- **API Docs:** http://localhost:8000/docs
+
+> ✅ Any CSS or TSX change now shows instantly — no Docker rebuild needed.
+
+---
 
 ## Configuration
 
@@ -29,11 +46,15 @@ Edit `.env` in the project root:
 | `BATTLE_DURATION_SECONDS` | `300` | Battle timer length (seconds) |
 | `DEFAULT_COUNTRIES` | `Turkey,Saudi Arabia,Egypt,Pakistan` | Countries in each battle |
 
+---
+
 ## Sounds
 
 Place MP3 files in `frontend/public/sounds/`:
 - `lion.mp3` — played when a Lion gift is received
-- `gameover.mp3` — played when battle ends
+- `gameover.mp3` — played when the battle ends
+
+---
 
 ## Architecture
 
@@ -58,6 +79,8 @@ frontend/
     components/           # CountryCard, Timer, WinnerModal
 ```
 
+---
+
 ## API Reference
 
 | Method | Endpoint | Description |
@@ -69,6 +92,8 @@ frontend/
 | `POST` | `/manual-score` | Add points (body: `{country, points}`) |
 | `POST` | `/reset` | Reset battle (keeps history) |
 | `WS` | `/ws` | Real-time updates |
+
+---
 
 ## Concurrency Safety
 
