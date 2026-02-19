@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: counterbattle_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: counterbattle
+      POSTGRES_USER: battle
+      POSTGRES_PASSWORD: battle
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U battle -d counterbattle" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: counterbattle_backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://battle:battle@postgres:5432/counterbattle
+      DATABASE_URL_SYNC: postgresql+psycopg2://battle:battle@postgres:5432/counterbattle
+      TIKTOK_USERNAME: ${TIKTOK_USERNAME:-}
+      TIKTOK_SESSION_ID: ${TIKTOK_SESSION_ID:-}
+      BATTLE_DURATION_SECONDS: ${BATTLE_DURATION_SECONDS:-300}
+      DEFAULT_COUNTRIES: ${DEFAULT_COUNTRIES:-Turkey,Saudi Arabia,Egypt,Pakistan}
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: counterbattle_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

@@ -1,0 +1,134 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow: hidden;
+    backdrop-filter: blur(6px);
+}
+
+.modal-card {
+    background: linear-gradient(145deg, #1a1a28, #12121a);
+    border: 1px solid rgba(245, 197, 24, 0.4);
+    border-radius: 24px;
+    padding: 3rem 2.5rem 2rem;
+    width: min(480px, 90vw);
+    text-align: center;
+    box-shadow: 0 0 60px rgba(245, 197, 24, 0.2), 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: winner-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.winner-crown {
+    font-size: 4rem;
+    line-height: 1;
+    filter: drop-shadow(0 4px 12px rgba(245, 197, 24, 0.6));
+    animation: bounce-crown 1s ease-in-out infinite;
+}
+
+@keyframes bounce-crown {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.winner-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent-gold);
+    margin: 0.75rem 0 0.25rem;
+    letter-spacing: -0.02em;
+}
+
+.winner-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    letter-spacing: -0.04em;
+    margin: 0.25rem 0;
+}
+
+.winner-flag {
+    font-size: 2rem;
+}
+
+.winner-sub {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-gold);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.final-rankings {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+}
+
+.ranking-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.ranking-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.ranking-pos {
+    font-size: 1.1rem;
+    width: 28px;
+}
+
+.ranking-flag {
+    font-size: 1.1rem;
+}
+
+.ranking-name {
+    flex: 1;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.ranking-score {
+    color: var(--accent-gold);
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.mt-close {
+    margin-top: 0;
+    width: 100%;
+}
+
+/* Confetti */
+.confetti-piece {
+    position: fixed;
+    top: -20px;
+    border-radius: 2px;
+    animation: confetti-fall 3s ease-in forwards;
+    pointer-events: none;
+}

@@ -1,0 +1,104 @@
+.leaderboard-page {
+    animation: slide-up 0.3s ease both;
+}
+
+.leaderboard-table {
+    padding: 0;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    font-size: 0.95rem;
+    vertical-align: middle;
+}
+
+tbody tr {
+    transition: background 0.2s;
+}
+
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.top-1 td {
+    background: rgba(245, 197, 24, 0.05);
+}
+
+.top-2 td {
+    background: rgba(160, 174, 192, 0.04);
+}
+
+.top-3 td {
+    background: rgba(205, 127, 50, 0.04);
+}
+
+.rank-cell {
+    font-size: 1.2rem;
+    width: 50px;
+}
+
+.country-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.wins-cell {
+    color: var(--accent-gold);
+    font-weight: 700;
+}
+
+.winrate-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 100px;
+}
+
+.winrate-fill {
+    height: 6px;
+    background: linear-gradient(90deg, #4a9eff, #9b59b6);
+    border-radius: 3px;
+    flex: 0 0 auto;
+    min-width: 2px;
+}
+
+.loading-state,
+.error-state,
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
